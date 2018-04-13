@@ -117,7 +117,10 @@ class ExternalMethod(UcsBase):
             elif getattr(self, prop) is not None:
                 # TODO: do not set cookie when in starship mode
                 if prop == 'cookie':
-                    continue
+                    cookie = getattr(self, prop)
+                    handle = ucscoreutils.get_handle_from_cookie(cookie)
+                    if handle and handle.is_starship():
+                        continue
                 xml_obj.set(prop_meta.xml_attribute, getattr(self, prop))
 
         self.child_to_xml(xml_obj, option)

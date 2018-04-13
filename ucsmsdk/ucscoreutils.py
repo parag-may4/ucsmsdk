@@ -29,6 +29,7 @@ from . ucsmeta import MO_CLASS_ID, METHOD_CLASS_ID, OTHER_TYPE_CLASS_ID, \
 
 
 log = logging.getLogger('ucs')
+global_handles = []
 
 
 def get_ucs_obj(class_id, elem, mo_obj=None):
@@ -682,3 +683,12 @@ def get_handle_from_cookie(cookie):
         if handle.cookie == cookie:
             return handle
     return None
+
+def add_handle_to_list(handle):
+    if handle and handle not in global_handles:
+        global_handles.append(handle)
+
+
+def remove_handle_from_list(handle):
+    if handle and handle in global_handles:
+        global_handles.remove(handle)

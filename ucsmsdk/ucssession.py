@@ -580,6 +580,7 @@ class UcsSession(object):
             True on successful connect
         """
         from .ucsmethodfactory import aaa_login
+        from .ucscoreutils import add_handle_to_list
 
         self.__auto_refresh = auto_refresh
         self.__force = force
@@ -605,6 +606,7 @@ class UcsSession(object):
         if auto_refresh:
             self.__start_refresh_timer()
 
+        add_handle_to_list(self)
         return True
 
     def _logout(self):
@@ -620,6 +622,7 @@ class UcsSession(object):
         """
 
         from .ucsmethodfactory import aaa_logout
+        from .ucscoreutils import remove_handle_from_list
 
         if self.__cookie is None:
             return True
@@ -639,6 +642,7 @@ class UcsSession(object):
 
         self.__clear()
 
+        remove_handle_from_list(self)
         return True
 
     def _is_starship(self):
