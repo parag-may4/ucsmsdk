@@ -676,3 +676,9 @@ def get_meta_info(class_id, include_prop=True,
         return
 
     return ClassIdMeta(meta_class_id, include_prop, show_tree, depth)
+
+def get_handle_from_cookie(cookie):
+    for handle in global_handles:
+        if handle.cookie == cookie:
+            return handle
+    return None

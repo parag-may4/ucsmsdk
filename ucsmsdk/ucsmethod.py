@@ -115,6 +115,9 @@ class ExternalMethod(UcsBase):
                     self.__dict__[prop].to_xml(xml_obj, option,
                                                prop_meta.xml_attribute)
             elif getattr(self, prop) is not None:
+                # TODO: do not set cookie when in starship mode
+                if prop == 'cookie':
+                    continue
                 xml_obj.set(prop_meta.xml_attribute, getattr(self, prop))
 
         self.child_to_xml(xml_obj, option)

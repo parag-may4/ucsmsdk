@@ -54,6 +54,36 @@ class UcsHandle(UcsSession):
         self.__commit_buf = {}
         self.__commit_buf_tagged = {}
 
+    def is_starship(self):
+        """
+        Check if SDK is running in starship mode
+        """
+        return self._is_starship()
+
+    def set_starship_proxy(self, proxy):
+        """
+        Connects to the server via the proxy URL
+        """
+        self._set_starship_proxy(proxy)
+
+    def unset_starship_proxy(self):
+        """
+        Connects to the server via the proxy URL
+        """
+        self._set_starship_proxy(None)
+
+    def set_starship_headers(self, headers):
+        """
+        Set the headers to be used in connection
+        """
+        self._set_starship_headers(headers)
+
+    def unset_starship_headers(self):
+        """
+        Set the headers to be used in connection
+        """
+        self._set_starship_headers(None)
+
     def set_dump_xml(self):
         """
         Enables the logging of xml requests and responses.

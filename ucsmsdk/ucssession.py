@@ -39,6 +39,8 @@ class UcsSession(object):
         self.__password = password
         self.__proxy = proxy
         self.__uri = self.__create_uri(port, secure)
+        self.__starship_proxy = None
+        self.__starship_headers = None
 
         self.__ucs = ip
         self.__name = None
@@ -248,8 +250,11 @@ class UcsSession(object):
         Example:
             response = post_xml('<aaaLogin inName="user" inPassword="pass">')
         """
-
-        ucsm_uri = self.__uri + "/nuova"
+        if self.__starship_proxy is not None:
+            self.__uri = self.__starship_proxy
+            ucsm_uri = self.__starship_proxy
+        else:
+            ucsm_uri = self.__uri + "/nuova"
         response_str = self.post(uri=ucsm_uri, data=xml_str, read=read)
         if self.__driver.redirect_uri:
             self.__uri = self.__driver.redirect_uri
@@ -635,6 +640,32 @@ class UcsSession(object):
         self.__clear()
 
         return True
+
+    def _is_starship(self):
+        if self.__starship_proxy:
+            return True
+        return False
+
+    def _set_starship_proxy(self, proxy):
+        """
+        Internal method to set proxy URL in starship environment
+        """
+        self.__starship_proxy = proxy
+        self.__driver.__redirect_uri = proxy
+
+    def _set_starship_headers(self, headers):
+        """
+        Internal method to set proxy URL in starship environment
+        """
+        self.__starship_headers = headers
+        for header in headers:
+            self.__driver.add_header(header, headers[header])
+
+        # set cookie for to_xml to work correctly
+        if headers["x-barracuda-session"]:
+            self.__cookie = headers["x-barracuda-session"]
+        else:
+            self.__cookie = headers["x-barracuda-apikey"]
 
     def _set_dump_xml(self):
         """
